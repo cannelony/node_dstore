@@ -13,6 +13,7 @@ def build(ctx):
     '-Wall',
     '-std=c++0x',
     '-DNDEBUG'
+    '-g -rdynamic'
   ]
   obj.source = ['./src/node_dstore.cc', './src/DStore.cc', './src/Element.cc', './src/Dictionary.cc']
   obj.target = 'dstore'

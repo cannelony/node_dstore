@@ -18,19 +18,25 @@
 #define TRUE 1
 #define FALSE 0
 
+Dictionary dictionary("dict.bin");
+DStore dstore(dictionary);
+
 ////////////////////////////////////////////////////////////////////
 
 v8::Handle<v8::Value> Insert(const v8::Arguments& args)
 {
-  Dictionary dictionary("dict.bin");
-  DStore dstore(dictionary);
-
+  //dictionary("dict.bin");
+  //dstore(dictionary);
+  Element dstoreSubject = dstore.createElement();
   v8::HandleScope scope;
   if (args[0]->IsObject()) {
     v8::Handle<v8::Object> rdfJson = args[0]->ToObject();
-    for (unsigned int i=0; i<rdfJson->GetPropertyNames()->Length(); i++) {
-      Element dstoreSubject = dstore.createElement();
-      const v8::Handle<v8::Value> key = rdfJson->GetPropertyNames()->Get(i);
+    std::cout << "Number of Subjects " << rdfJson->GetPropertyNames()->Length() << std::endl;
+    std::size_t numberOfSubject = rdfJson->GetPropertyNames()->Length();
+    v8::Handle<v8::Array> subjects = rdfJson->GetPropertyNames();
+    for (std::size_t i=0; i<numberOfSubject; i++) {
+      dstoreSubject.reset();
+      const v8::Handle<v8::Value> key = subjects->Get(i);
       // convert to std::string
       v8::String::Utf8Value subject(key->ToString());
       std::string jsonSubject(*subject);
@@ -43,16 +49,19 @@ v8::Handle<v8::Value> Insert(const v8::Arguments& args)
       v8::Handle<v8::Array> propertyKeys = v8::Handle<v8::Array>::Cast(subjectObject->GetPropertyNames());
       // access one property of http://example.org/about (http://purl.org/dc/elements/1.1/creator)
       // [ { "value" : "Anna Wilder", "type" : "literal" } ]
-      for (int j=0; j<propertyKeys->Length(); j++) {
+      int numberOfPropertKeys = propertyKeys->Length();
+      v8::Handle<v8::Array> properties = subjectObject->GetPropertyNames();
+      for (int j=0; j<numberOfPropertKeys; j++) {
         // get property name
-        const v8::Handle<v8::Value> propertyKey = subjectObject->GetPropertyNames()->Get(j);
+        const v8::Handle<v8::Value> propertyKey = properties->Get(j);
         // convert to std::string
         v8::String::Utf8Value property(propertyKey->ToString());
         std::string jsonProperty(*property);
         // iterate through one property
         v8::Handle<v8::Array> propertyArray = v8::Handle<v8::Array>::Cast(subjectObject->Get(propertyKeys->Get(v8::Number::New(j))));
         // access one propertyValue of http://purl.org/dc/elements/1.1/creator
-        for (int k=0; k<propertyArray->Length(); k++) {
+        int numberOfObjects = propertyArray->Length();
+        for (int k=0; k<numberOfObjects; k++) {
           v8::Handle<v8::Object> propertyValueObject = v8::Handle<v8::Object>::Cast(propertyArray->Get(v8::Number::New(k)));
           // access value, type, lang
           v8::Handle<v8::String> propertyValueObjectValue = v8::Handle<v8::String>::Cast(propertyValueObject->Get(v8::String::New(VALUE)));
@@ -70,7 +79,7 @@ v8::Handle<v8::Value> Insert(const v8::Arguments& args)
           std::string jsonObjectLang = (*propertyLang);
           std::string jsonObjectDatatype(*propertyDatatype);
 //          std::cout << "<" << jsonSubject << "> <" << jsonProperty << "> \"" << jsonObjectValue << "\" - Type: " << jsonObjectType << ", Lang: " << jsonObjectLang << ", Datatype: " << jsonObjectDatatype << std::endl;
-
+          //std::cout << "read triples " << i+j+k << std::endl;
           // add property to dstore element
           dstoreSubject.addProperty(jsonProperty, jsonObjectType, jsonObjectValue, jsonObjectLang, jsonObjectDatatype);
         }
@@ -109,9 +118,9 @@ v8::Handle<v8::Value> InsertMultiple(const v8::Arguments& args)
 
 v8::Handle<v8::Value> Find(const v8::Arguments& args)
 {
-  Dictionary dictionary("dict.bin");
+  //Dictionary dictionary("dict.bin");
   // init dstore
-  DStore dstore(dictionary);
+  //DStore dstore(dictionary);
   v8::HandleScope scope;
   // v8::String holds first argument
   v8::String::Utf8Value subject_(args[0]->ToString());
@@ -205,9 +214,9 @@ v8::Handle<v8::Value> Find(const v8::Arguments& args)
 
 v8::Handle<v8::Value> HasSubject(const v8::Arguments& args)
 {
-  Dictionary dictionary("dict.bin");
+  //Dictionary dictionary("dict.bin");
   // init dstore
-  DStore dstore(dictionary);
+  //DStore dstore(dictionary);
   v8::HandleScope scope;
   // v8::String holds first argument
   v8::String::Utf8Value subject_(args[0]->ToString());

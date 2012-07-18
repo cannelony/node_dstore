@@ -1,4 +1,16 @@
 var dstore = require('../build/Release/dstore');
+var fs = require('fs');
+
+// read file
+var now = new Date().getTime();
+console.log(now);
+try {
+  //var data = fs.readFileSync('triple/dbpedia.16.json', 'ascii');
+  //console.log(data);
+} catch (err) {
+  console.error("There was an error opening the file:");
+  console.log(err);
+}
 
 var rdfJson = {
   "http://example.org/about" : 
@@ -43,30 +55,77 @@ var rdfJson2 = {
   };
 
 // test insert
-var msg = dstore.insert(rdfJson);
+//var msg = dstore.insert(rdfJson);
+//var msg = dstore.insert(JSON.parse(data));
+//var then = new Date().getTime();
+//console.log('Import took ' + (then - now) + ' ms!');
 //console.log(msg);
 
 //// test dstore.hasSubject
-var hasSubject = dstore.hasSubject("http://example.org/about", function(err, status) {
-	console.log("\nhttp://example.org/about - callback - hasSubject should be true: " + status + '\n');
+var now = new Date().getTime();
+var hasSubject = dstore.hasSubject("http://dbpedia.org/resource/%C3%87ukurova,_Adana", function(err, status) {
+	var then = new Date().getTime();
+	console.log('HasSubject took ' + (then - now) + ' ms!');
+	console.log("\nhttp://dbpedia.org/resource/%C3%87ukurova,_Adana - callback - hasSubject should be true: " + status + '\n');
 });
 //
-console.log("\nhttp://example.org/about - hasSubject should be true: " + hasSubject + '\n');
+console.log("\nhttp://dbpedia.org/resource/%C3%87ukurova,_Adana - hasSubject should be true: " + hasSubject + '\n');
 //
 //var hasSubject = dstore.hasSubject("http://foobar.boo/about");
 //console.log("Should be true: " + hasSubject);
 
 // test find
-var find = dstore.find("http://example.org/about", function(err, result) {
+console.log('data.json@50%');
+var now = new Date().getTime();
+var find = dstore.find("http://dbpedia.org/resource/%C3%87ukurova,_Adana", function(err, result) {
+  var then = new Date().getTime();
+  console.log('Query took ' + (then - now) + ' ms!');
   console.log('ENTER FIND CALLBACK');
   console.log(result);
-  console.log('\nobjects for property http://purl.org/dc/elements/1.1/title\n');
-  console.log(result['http://example.org/about']['http://purl.org/dc/elements/1.1/title'])
-  console.log('\naccess the first object and return the value')
-  console.log(result['http://example.org/about']['http://purl.org/dc/elements/1.1/title'][0].value);
-  console.log('\nDONE FIND CALLBACK');
 });
 
-console.log('return value of find' + find);
+//console.log('return value of find: ' + find);
 
+console.log('\ndata.json@99%');
+var now = new Date().getTime();
+var find = dstore.find("http://dbpedia.org/resource/%C4%8Cetverored", function(err, result) {
+  var then = new Date().getTime();
+  console.log('Query took ' + (then - now) + ' ms!');
+  console.log('ENTER FIND CALLBACK');
+  console.log(result);
+});
+	
+console.log('\ndata.json@0%');
+var now = new Date().getTime();
+var find = dstore.find("http://dbpedia.org/ontology/", function(err, result) {
+  var then = new Date().getTime();
+  console.log('Query took ' + (then - now) + ' ms!');
+  console.log('ENTER FIND CALLBACK');
+  console.log(result);
+});
+
+console.log('\nrdfJSON');
+var now = new Date().getTime();
+var find = dstore.find("http://example.org/about", function(err, result) {
+  var then = new Date().getTime();
+  console.log('Query took ' + (then - now) + ' ms!');
+  console.log('ENTER FIND CALLBACK');
+  console.log(result);
+//console.log('\nobjects for property http://purl.org/dc/elements/1.1/title\n');
+//console.log(result['http://example.org/about']['http://purl.org/dc/elements/1.1/title'])
+//console.log('\naccess the first object and return the value')
+//console.log(result['http://example.org/about']['http://purl.org/dc/elements/1.1/title'][0].value);
+//console.log('\nDONE FIND CALLBACK');
+});
+
+console.log('\naksw.json');
+var now = new Date().getTime();
+var find = dstore.find("http://aksw.org/PhilippFrischmuth", function(err, result) {
+  var then = new Date().getTime();
+  console.log('Query took ' + (then - now) + ' ms!');
+  console.log('ENTER FIND CALLBACK');
+  console.log(result);
+});
+
+	
 //var msg = dstore.insert(rdfJson2)

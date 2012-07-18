@@ -117,3 +117,10 @@ DStore::SubjectID Element::getSubjectID()
 {
   return subjectID_;
 }
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
+void Element::reset() {
+  properties_.clear();
+  subjectID_ = 0;
+}

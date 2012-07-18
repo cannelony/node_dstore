@@ -22,6 +22,7 @@ public:
   void setSubject(const DStore::DictID& subjectID);
   void addProperty(const std::string& uri, const std::string& type, const std::string& value, const std::string& language = "", const std::string& datatype = "");
   void addProperty(const DStore::DictID& propertyID, const ObjectVector& objectVector);
+  void reset();
   std::size_t getSize();
   DStore::SubjectID getSubjectID();
   PropertyMap getProperties();

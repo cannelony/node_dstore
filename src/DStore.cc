@@ -17,10 +17,11 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <algorithm> //foreach
+#include <ctime>
 
 #define PAGE_SIZE 4096
 #define LOG2_PAGE_SIZE 12
-#define INIT_NUM_PAGES 1
+#define INIT_NUM_PAGES 10
 #define GOLDEN_RATIO 1.618f
 
 #define MAX(x, y) (x > y ? x : y)
@@ -72,6 +73,8 @@ DStore::~DStore()
 
 Element DStore::find (const SubjectID& id)
 {
+  //clock_t start = clock();
+  //std::cout << "start " << start << std::endl;
 //  std::cout << "DSTORE size of subjects_ " << subjects_.size() << std::endl;
 
   Element result(dict_);
@@ -109,6 +112,9 @@ Element DStore::find (const SubjectID& id)
           result.addProperty(h.id, objectVector);
         }
     }
+//    clock_t end = clock();
+//    std::cout << "end " << end << std::endl;
+//    std::cout << "Query inside DSTORE took " << end - start << std::endl;
     return result;
   }
 
@@ -122,12 +128,17 @@ bool DStore::hasSubject(const SubjectID& id)
   //Dictionary dict("dict.bin");
   //SubjectID subjectID = dict_.HasKey(subject);
 //  std::cout << "DSTORE hasSubject - parameter subjectid " << id << " offsetmap size " << subjects_.size() << std::endl;
-  for (auto pair : subjects_) {
-    if (pair.first == id) {
-      return true;
-    }
+  if (subjects_.count(id) > 0) {
+    return true;
+  } else {
+    return false;
   }
-  return false;
+//  for (auto pair : subjects_) {
+//    if (pair.first == id) {
+//      return true;
+//    }
+//  }
+//  return false;
 }
 
 ////////////////////////////////////////////////////////////////////
