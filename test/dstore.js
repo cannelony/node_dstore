@@ -2,10 +2,8 @@ var dstore = require('../build/Release/dstore');
 var fs = require('fs');
 
 // read file
-var now = new Date().getTime();
-console.log(now);
 try {
-  //var data = fs.readFileSync('triple/dbpedia.16.json', 'ascii');
+  // var data = fs.readFileSync('triple/dbpedia.16.json', 'ascii');
   //console.log(data);
 } catch (err) {
   console.error("There was an error opening the file:");
@@ -56,16 +54,16 @@ var rdfJson2 = {
 
 // test insert
 //var msg = dstore.insert(rdfJson);
-//var msg = dstore.insert(JSON.parse(data));
+// var msg = dstore.insert(JSON.parse(data));
 //var then = new Date().getTime();
 //console.log('Import took ' + (then - now) + ' ms!');
 //console.log(msg);
 
 //// test dstore.hasSubject
-var now = new Date().getTime();
+var benchmarkNow = process.hrtime();
 var hasSubject = dstore.hasSubject("http://dbpedia.org/resource/%C3%87ukurova,_Adana", function(err, status) {
-	var then = new Date().getTime();
-	console.log('HasSubject took ' + (then - now) + ' ms!');
+  var benchmarkThen = process.hrtime();
+	console.log('HasSubject took ' + (benchmarkThen[1] - benchmarkNow[1])/1000000 + ' ms!');
 	console.log("\nhttp://dbpedia.org/resource/%C3%87ukurova,_Adana - callback - hasSubject should be true: " + status + '\n');
 });
 //
@@ -76,10 +74,10 @@ console.log("\nhttp://dbpedia.org/resource/%C3%87ukurova,_Adana - hasSubject sho
 
 // test find
 console.log('data.json@50%');
-var now = new Date().getTime();
+var benchmarkNow = process.hrtime();
 var find = dstore.find("http://dbpedia.org/resource/%C3%87ukurova,_Adana", function(err, result) {
-  var then = new Date().getTime();
-  console.log('Query took ' + (then - now) + ' ms!');
+  var benchmarkThen = process.hrtime();
+  console.log('Query took ' + (benchmarkThen[1] - benchmarkNow[1])/1000000 + ' ms!');
   console.log('ENTER FIND CALLBACK');
   console.log(result);
 });
@@ -87,28 +85,28 @@ var find = dstore.find("http://dbpedia.org/resource/%C3%87ukurova,_Adana", funct
 //console.log('return value of find: ' + find);
 
 console.log('\ndata.json@99%');
-var now = new Date().getTime();
+var benchmarkNow = process.hrtime();
 var find = dstore.find("http://dbpedia.org/resource/%C4%8Cetverored", function(err, result) {
-  var then = new Date().getTime();
-  console.log('Query took ' + (then - now) + ' ms!');
+  var benchmarkThen = process.hrtime();
+  console.log('Query took ' + (benchmarkThen[1] - benchmarkNow[1])/1000000 + ' ms!');
   console.log('ENTER FIND CALLBACK');
   console.log(result);
 });
 	
 console.log('\ndata.json@0%');
-var now = new Date().getTime();
+var benchmarkNow = process.hrtime();
 var find = dstore.find("http://dbpedia.org/ontology/", function(err, result) {
-  var then = new Date().getTime();
-  console.log('Query took ' + (then - now) + ' ms!');
+  var benchmarkThen = process.hrtime();
+  console.log('Query took ' + (benchmarkThen[1] - benchmarkNow[1])/1000000 + ' ms!');
   console.log('ENTER FIND CALLBACK');
   console.log(result);
 });
 
 console.log('\nrdfJSON');
-var now = new Date().getTime();
+var benchmarkNow = process.hrtime();
 var find = dstore.find("http://example.org/about", function(err, result) {
-  var then = new Date().getTime();
-  console.log('Query took ' + (then - now) + ' ms!');
+  var benchmarkThen = process.hrtime();
+  console.log('Query took ' + (benchmarkThen[1] - benchmarkNow[1])/1000000 + ' ms!');
   console.log('ENTER FIND CALLBACK');
   console.log(result);
 //console.log('\nobjects for property http://purl.org/dc/elements/1.1/title\n');
@@ -119,10 +117,10 @@ var find = dstore.find("http://example.org/about", function(err, result) {
 });
 
 console.log('\naksw.json');
-var now = new Date().getTime();
+var benchmarkNow = process.hrtime();
 var find = dstore.find("http://aksw.org/PhilippFrischmuth", function(err, result) {
-  var then = new Date().getTime();
-  console.log('Query took ' + (then - now) + ' ms!');
+  var benchmarkThen = process.hrtime();
+  console.log('Query took ' + (benchmarkThen[1] - benchmarkNow[1])/1000000 + ' ms!');
   console.log('ENTER FIND CALLBACK');
   console.log(result);
 });
