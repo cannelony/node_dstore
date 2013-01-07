@@ -11,7 +11,7 @@ try {
 }
 
 
-// insert the read data (turtle)
+// insert the read data (talis rdf json)
 var msg = dstore.insert(JSON.parse(data));
 console.log('Successfully insert: ', msg);
 
